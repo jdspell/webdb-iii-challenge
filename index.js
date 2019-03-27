@@ -33,12 +33,69 @@ server.post('/api/cohorts', async (req, res) => {
         const updatedCohort = await db('cohorts')
             .where({ id: id })
             .first();
-            
+
         res.status(200).json(updatedCohort);
     } catch (error) {
 
     }
 });
+
+
+server.get('/api/cohorts/:id', async (req, res) => {
+    try {
+        const cohort = await db('cohorts')
+            .where({ id: req.params.id })
+            .first();
+        res.status(200).json(cohort);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
+
+server.get('/api/cohorts/:id/students', async (req, res) => {
+    try {
+
+    } catch (error) {
+
+    }
+});
+
+server.put('/api/cohorts/:id', async (req, res) => {
+    try {
+        const count = await db('cohorts')
+            .where({ id: req.params.id })
+            .update(req.body);
+        
+        if(count) {
+            const cohort = await db('cohorts')
+                .where({ id: req.params.id })
+                .first();
+            res.status(200).json(cohort);
+        } else {
+            res.status(404).json({ message: "Could not find cohort." });
+        }
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
+
+server.delete('/api/cohorts/:id', async (req, res) => {
+    try {
+        const count = await db('cohorts')
+            .where({ id: req.params.id })
+            .del()
+        
+        if(count) {
+            res.status(200).json(count);
+        } else {
+            res.status(404).json({ message: "Could not delete cohort." });
+        }
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
+
+
 
 
 const port = 3000;
